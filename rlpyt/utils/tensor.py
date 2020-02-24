@@ -1,4 +1,3 @@
-
 import torch
 
 
@@ -9,15 +8,14 @@ def select_at_indexes(indexes, tensor):
     num = indexes.numel()
     t_flat = tensor.view((num,) + tensor.shape[dim:])
     s_flat = t_flat[torch.arange(num), indexes.view(-1)]
-    return s_flat.view(tensor.shape[:dim] + tensor.shape[dim + 1:])
+    return s_flat.view(tensor.shape[:dim] + tensor.shape[dim + 1 :])
 
 
 def to_onehot(indexes, num, dtype=None):
     """Dimension of size num added to the end of indexes.shape."""
     if dtype is None:
         dtype = indexes.dtype
-    onehot = torch.zeros(indexes.shape + (num,),
-        dtype=dtype, device=indexes.device)
+    onehot = torch.zeros(indexes.shape + (num,), dtype=dtype, device=indexes.device)
     onehot.scatter_(-1, indexes.unsqueeze(-1).type(torch.long), 1)
     return onehot
 
@@ -33,7 +31,8 @@ def from_onehot(onehot, dim=-1, dtype=None):
 def valid_mean(tensor, valid=None, dim=None):
     dim = () if dim is None else dim
     if valid is None:
-        return tensor.mean(dim=dim)
+        # return tensor.mean(dim=dim)
+        return tensor.mean()
     valid = valid.type(tensor.dtype)  # Convert as needed.
     return (tensor * valid).sum(dim=dim) / valid.sum(dim=dim)
 
